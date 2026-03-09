@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cyber Crime Risk Assessment Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <div class="brand-badge">
+            <span>CCRT</span>
+          </div>
+          <div class="brand-title">
+            <h1>Cyber Crime Risk Terminal</h1>
+            <span>Threat Assessment &amp; Investigation Board</span>
+          </div>
+        </div>
+        <div class="header-status">
+          <div class="status-pill">
+            <span class="status-pill-dot"></span>
+            LIVE THREAT MONITOR
+          </div>
+          <div class="header-divider"></div>
+          <div class="header-tag">Forensic Operations Deck</div>
+        </div>
+      </header>
+
+      <main class="app-main">
+        <section class="column">
+          <div class="panel" id="overview-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-indicator"></span>
+                Threat Overview
+              </div>
+              <div class="panel-meta" id="overview-meta">
+                INCIDENTS: 0 • LOADING
+              </div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-label">Total Incidents</div>
+                <div class="kpi-value" id="kpi-total">0</div>
+                <div class="kpi-tag">GLOBAL</div>
+              </div>
+              <div class="kpi-card kpi-high">
+                <div class="kpi-label">High Risk</div>
+                <div class="kpi-value" id="kpi-high">0</div>
+                <div class="kpi-tag">CRITICAL</div>
+              </div>
+              <div class="kpi-card kpi-medium">
+                <div class="kpi-label">Medium Risk</div>
+                <div class="kpi-value" id="kpi-medium">0</div>
+                <div class="kpi-tag">ELEVATED</div>
+              </div>
+              <div class="kpi-card kpi-low">
+                <div class="kpi-label">Low Risk</div>
+                <div class="kpi-value" id="kpi-low">0</div>
+                <div class="kpi-tag">BASELINE</div>
+              </div>
+            </div>
+            <div class="charts-grid">
+              <div class="chart-container">
+                <div class="chart-title">Risk Distribution</div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chart-risk"></canvas>
+                </div>
+              </div>
+              <div class="chart-container">
+                <div class="chart-title">Threat Activity Timeline</div>
+                <div class="chart-canvas-wrapper">
+                  <canvas id="chart-timeline"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-indicator"></span>
+                Incident Input Panel
+              </div>
+              <div class="panel-meta">Create &amp; Score Case Files</div>
+            </div>
+            <form id="incident-form">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label class="form-label">Incident Title</label>
+                  <input
+                    class="form-input"
+                    name="title"
+                    id="field-title"
+                    placeholder="e.g. Credential Harvesting via Spear Phishing"
+                    required
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Incident Type</label>
+                  <select
+                    class="form-select"
+                    name="incident_type"
+                    id="field-incident-type"
+                  >
+                    <option>Phishing</option>
+                    <option>Malware</option>
+                    <option>DDoS</option>
+                    <option>Data Breach</option>
+                    <option>Insider Threat</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Attack Vector</label>
+                  <input
+                    class="form-input"
+                    name="attack_vector"
+                    id="field-attack-vector"
+                    placeholder="Email link, RDP, VPN, web app..."
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Severity (1–10)</label>
+                  <input
+                    class="form-input"
+                    type="number"
+                    name="severity"
+                    id="field-severity"
+                    min="1"
+                    max="10"
+                    value="5"
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">System Affected</label>
+                  <input
+                    class="form-input"
+                    name="system_affected"
+                    id="field-system-affected"
+                    placeholder="e.g. Finance DB cluster, HR portal"
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Detection Time</label>
+                  <input
+                    class="form-input"
+                    name="detection_time"
+                    id="field-detection-time"
+                    placeholder="e.g. 2 hours after compromise"
+                  />
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Attack Complexity</label>
+                  <select
+                    class="form-select"
+                    name="attack_complexity"
+                    id="field-attack-complexity"
+                  >
+                    <option value="1">Low</option>
+                    <option value="2" selected>Medium</option>
+                    <option value="3">High</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Data Sensitivity</label>
+                  <select
+                    class="form-select"
+                    name="data_sensitivity"
+                    id="field-data-sensitivity"
+                  >
+                    <option value="1">Low</option>
+                    <option value="2" selected>Moderate</option>
+                    <option value="3">Highly Sensitive</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Exposure Level</label>
+                  <select
+                    class="form-select"
+                    name="exposure_level"
+                    id="field-exposure-level"
+                  >
+                    <option value="1">Contained</option>
+                    <option value="2" selected>Limited</option>
+                    <option value="3">Widespread</option>
+                  </select>
+                </div>
+                <div class="form-field full-span">
+                  <label class="form-label">Description</label>
+                  <textarea
+                    class="form-textarea"
+                    name="description"
+                    id="field-description"
+                    placeholder="Summarize what happened, impacted assets, and any observed indicators."
+                  ></textarea>
+                </div>
+              </div>
+              <div class="analyze-bar">
+                <button class="button-primary" id="analyze-button" type="submit">
+                  <span class="dot"></span>
+                  Analyze Threat
+                </button>
+                <div class="score-display" id="score-display" style="display:none;">
+                  <div class="score-chip">
+                    Score: <span id="score-value">0</span>
+                  </div>
+                  <div class="score-badge" id="score-badge">Risk: N/A</div>
+                </div>
+              </div>
+              <ul class="mitigation-list" id="mitigation-list"></ul>
+            </form>
+          </div>
+        </section>
+
+        <section class="column">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-indicator"></span>
+                Investigation Board
+              </div>
+              <div class="panel-meta">Case Files &amp; Status</div>
+            </div>
+            <div class="board-grid" id="board-grid">
+              <div class="empty-state">
+                No case files yet. Log an incident to begin the investigation trail.
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-indicator"></span>
+                Live Alerts
+              </div>
+              <div class="panel-meta">Streaming Anomaly Indicators</div>
+            </div>
+            <div class="alerts-list" id="alerts-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span class="panel-title-indicator"></span>
+                Reports
+              </div>
+              <div class="panel-meta">History &amp; PDF Export</div>
+            </div>
+            <div class="reports-controls">
+              <select
+                class="form-select filter-select"
+                id="reports-filter"
+              >
+                <option value="All">All Risk Levels</option>
+                <option value="High">High Risk</option>
+                <option value="Medium">Medium Risk</option>
+                <option value="Low">Low Risk</option>
+              </select>
+              <button class="button-outline" id="export-btn">
+                Export PDF
+              </button>
+            </div>
+            <div class="reports-table-wrapper">
+              <table class="reports-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Type</th>
+                    <th>Score</th>
+                    <th>Risk</th>
+                    <th>Created</th>
+                  </tr>
+                </thead>
+                <tbody id="reports-body">
+                  <tr>
+                    <td colspan="6" class="empty-state">
+                      No incidents recorded yet.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <noscript>
+      This dashboard requires JavaScript. Please enable JavaScript or use a
+      modern browser (Chrome, Edge, or Firefox).
+    </noscript>
+
+    <script src="/static/js/main.js"></script>
+  </body>
+  </html>
+
